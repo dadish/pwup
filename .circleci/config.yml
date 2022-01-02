@@ -1,0 +1,17 @@
+version: 2.1
+jobs:
+  start:
+    machine:
+      image: ubuntu-2004:202111-02
+    steps:
+      - checkout
+      - run:
+          command: |
+            cat /etc/issue
+            docker version
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - start
