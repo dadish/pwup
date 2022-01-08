@@ -1,9 +1,19 @@
 version: "3.9"
+
 services:
   nginx:
-    build: 
-      context: ./nginx
+    image: nginx:1.21.5-alpine
     ports:
       - 80:80
     volumes:
       - "./app:/usr/share/nginx/html:ro"
+      - "./nginx/conf.d:/etc/nginx/templates"
+    networks:
+      - pw
+
+  php-fpm:
+    build:
+      context: ./php-fpm
+networks:
+  pw:
+    driver: bridge
