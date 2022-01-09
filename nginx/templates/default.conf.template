@@ -2,14 +2,15 @@ server {
 	listen 80;
 	# listen 443 ssl;
 
-	root /usr/share/nginx/html;
+	root /var/www;
+	server_name localhost;
 	# server_name example.com www.example.com;
 	# ssl_certificate /etc/pki/tls/certs/example.com.crt;
 	# ssl_certificate_key /etc/pki/tls/private/example.com.key;
 
 	client_max_body_size 50m;
-	access_log /usr/share/nginx/html/_logs/access.log;
-	error_log /usr/share/nginx/html/_logs/error.log;
+	access_log /var/log/nginx/access.log;
+	error_log /var/log/nginx/error.log;
 
 	# -----------------------------------------------------------------------------------------------
 	# Set default directory index files
