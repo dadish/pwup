@@ -3,12 +3,17 @@ jobs:
   start:
     machine:
       image: ubuntu-2004:202111-02
+    resource_class: medium
     steps:
       - checkout
       - run:
+          name: Start the containers
           command: |
-            cat /etc/issue
-            docker version
+            docker-compose up -d
+      - run:
+          name: Check
+          command: |
+            curl 127.0.0.1
 
 workflows:
   version: 2

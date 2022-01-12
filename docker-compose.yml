@@ -1,0 +1,31 @@
+version: "3.9"
+
+networks:
+  pw:
+    name: pw
+    driver: bridge
+
+services:
+
+  php-fpm:
+    container_name: php-fpm
+    build:
+      context: ./php-fpm
+    volumes:
+      - ./www:/var/www:rw
+    networks:
+      - pw
+
+  nginx:
+    container_name: nginx
+    image: nginx:mainline
+    ports:
+      - 80:80
+    volumes:
+      - "./www:/var/www:ro"
+      - "./log:/var/log:rw"
+      - "./nginx/templates:/etc/nginx/templates"
+    depends_on:
+      - php-fpm
+    networks:
+      - pw
