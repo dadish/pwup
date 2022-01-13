@@ -1,5 +1,3 @@
 <?php
 
-$one = "one";
-
-echo "$one two";
+echo "Hello World!";

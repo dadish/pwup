@@ -1,0 +1,6 @@
+#!/bin/sh
+
+touch /tmp/hello_dada
+
+# kick off the upstream command:
+exec /usr/local/bin/docker-php-entrypoint "$@"
