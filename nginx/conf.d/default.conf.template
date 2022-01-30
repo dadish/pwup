@@ -135,6 +135,6 @@ server {
 		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 
 		# Pass request to php-fpm fastcgi socket
-		fastcgi_pass php-fpm:9000;
+		fastcgi_pass ${PHP_FPM_SERVER};
 	}
 }

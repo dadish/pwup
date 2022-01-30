@@ -3,12 +3,10 @@ version: "3.9"
 networks:
   pw:
     name: pw
-    driver: bridge
 
 services:
-
   php-fpm:
-    container_name: php-fpm
+    container_name: ${PREFIX}php-fpm
     build:
       context: ./php-fpm
     volumes:
@@ -17,15 +15,29 @@ services:
       - pw
 
   nginx:
-    container_name: nginx
-    image: nginx:mainline
+    container_name: ${PREFIX}nginx
+    image: nginx:alpine
     ports:
       - 80:80
     volumes:
       - "./www:/var/www:ro"
-      - "./log:/var/log:rw"
-      - "./nginx/templates:/etc/nginx/templates"
+      - "./nginx/conf.d:/etc/nginx/templates"
     depends_on:
       - php-fpm
+    networks:
+      - pw
+    environment:
+      - PHP_FPM_SERVER=${PREFIX}php-fpm:9000
+  
+  db:
+    container_name: ${PREFIX}db
+    image: mariadb:latest
+    environment:
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASS}
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
+    ports:
+      - 127.0.0.1:3306:3306
     networks:
       - pw
