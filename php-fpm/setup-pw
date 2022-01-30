@@ -1,0 +1,12 @@
+#!/bin/sh
+
+cd /tmp
+
+wget https://codeload.github.com/processwire/processwire/tar.gz/refs/heads/dev -O processwire.tar.gz
+
+tar -xf processwire.tar.gz
+
+cp -ru processwire/* /var/www/
+
+# kick off the upstream command:
+exec /usr/local/bin/docker-php-entrypoint "$@"
