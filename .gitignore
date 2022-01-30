@@ -1,2 +1,4 @@
-www
 .env
+
+www
+!www/Readme.md
