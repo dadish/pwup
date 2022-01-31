@@ -23,7 +23,7 @@ services:
       - "./www:/var/www:ro"
       - "./nginx/conf.d:/etc/nginx/templates"
     depends_on:
-      - php-fpm
+      - ${PREFIX}php-fpm
     networks:
       - pw
     environment:

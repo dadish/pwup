@@ -2,11 +2,11 @@
 
 cd /tmp
 
-wget https://codeload.github.com/processwire/processwire/tar.gz/refs/heads/dev -O processwire.tar.gz
+wget https://codeload.github.com/processwire/processwire/tar.gz/refs/heads/dev -O processwire-dev.tar.gz
 
-tar -xf processwire.tar.gz
+tar -xf processwire-dev.tar.gz
 
-cp -ru processwire/* /var/www/
+cp -ru processwire-dev/* /var/www/
 
 # kick off the upstream command:
 exec /usr/local/bin/docker-php-entrypoint "$@"
