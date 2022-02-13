@@ -6,7 +6,6 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions gd pdo_mysql
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY php.ini "$PHP_INI_DIR/conf.d/"
 
 COPY setup-pw /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/setup-pw"]
