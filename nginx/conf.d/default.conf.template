@@ -1,0 +1,140 @@
+server {
+	listen 80;
+	# listen 443 ssl;
+
+	root /var/www;
+	server_name localhost;
+	# server_name example.com www.example.com;
+	# ssl_certificate /etc/pki/tls/certs/example.com.crt;
+	# ssl_certificate_key /etc/pki/tls/private/example.com.key;
+
+	client_max_body_size 50m;
+	access_log /var/log/nginx/access.log;
+	error_log /var/log/nginx/error.log;
+
+	# -----------------------------------------------------------------------------------------------
+	# Set default directory index files
+	# -----------------------------------------------------------------------------------------------
+
+	index index.php index.html index.htm;
+
+	# -----------------------------------------------------------------------------------------------
+	# Optional: Redirect users to the 'www.' version of the site (uncomment to enable).
+	# For example: http://processwire.com/ would be redirected to http://www.processwire.com/
+	# -----------------------------------------------------------------------------------------------
+
+	# if ($host !~* ^www\.) {
+	# 	rewrite ^(.*)$ $scheme://www.$host$1 permanent;
+	# }
+
+	# -----------------------------------------------------------------------------------------------
+	# Access Restrictions: Protect ProcessWire system files
+	# -----------------------------------------------------------------------------------------------
+
+	# Block access to ProcessWire system files
+	location ~ \.(inc|info|module|sh|sql)$ {
+		deny all;
+	}
+
+	# Block access to any file or directory that begins with a period
+	location ~ /\. {
+		deny all;
+	}
+
+	# Block access to protected assets directories
+	location ~ ^/(site|site-[^/]+)/assets/(cache|logs|backups|sessions|config|install|tmp)($|/.*$) {
+		deny all;
+	}
+
+	# Block acceess to the /site/install/ directory
+	location ~ ^/(site|site-[^/]+)/install($|/.*$) {
+		deny all;
+	}
+
+	# Block dirs in /site/assets/ dirs that start with a hyphen
+	location ~ ^/(site|site-[^/]+)/assets.*/-.+/.* {
+		deny all;
+	}
+
+	# Block access to /wire/config.php, /site/config.php, /site/config-dev.php, and /wire/index.config.php
+	location ~ ^/(wire|site|site-[^/]+)/(config|index\.config|config-dev)\.php$ {
+		deny all;
+	}
+
+	# Block access to any PHP-based files in /templates-admin/
+	location ~ ^/(wire|site|site-[^/]+)/templates-admin($|/|/.*\.(php|html?|tpl|inc))$ {
+		deny all;
+	}
+
+	# Block access to any PHP or markup files in /site/templates/
+	location ~ ^/(site|site-[^/]+)/templates($|/|/.*\.(php|html?|tpl|inc))$ {
+		deny all;
+	}
+
+	# Block access to any PHP files in /site/assets/
+	location ~ ^/(site|site-[^/]+)/assets($|/|/.*\.php)$ {
+		deny all;
+	}
+
+	# Block access to any PHP files in core or core module directories
+	location ~ ^/wire/(core|modules)/.*\.(php|inc|tpl|module)$ {
+		deny all;
+	}
+
+	# Block access to any PHP files in /site/modules/
+	location ~ ^/(site|site-[^/]+)/modules/.*\.(php|inc|tpl|module)$ {
+		deny all;
+	}
+
+	# Block access to any software identifying txt files
+	location ~ ^/(COPYRIGHT|INSTALL|README|htaccess)\.(txt|md)$ {
+		deny all;
+	}
+
+	# Block all http access to the default/uninstalled site-default directory
+	location ~ ^/site-default/ {
+		deny all;
+	}
+
+	# -----------------------------------------------------------------------------------------------
+	# If the request is for a static file, then set expires header and disable logging.
+	# Give control to ProcessWire if the requested file or directory is non-existing.
+	# -----------------------------------------------------------------------------------------------
+
+	location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|eot|woff|ttf)$ {
+		expires 24h;
+		log_not_found off;
+		access_log off;
+		try_files $uri $uri/ /index.php?it=$uri&$args;
+	}
+
+	# -----------------------------------------------------------------------------------------------
+	# This location processes all other requests. If the request is for a file or directory that
+	# physically exists on the server, then load the file. Else give control to ProcessWire.
+	# -----------------------------------------------------------------------------------------------
+
+	location / {
+		try_files $uri $uri/ /index.php?it=$uri&$args;
+	}
+
+	# -----------------------------------------------------------------------------------------------
+	# Pass .php requests to fastcgi socket
+	# -----------------------------------------------------------------------------------------------
+
+	location ~ \.php$ {
+
+		# Check if the requested PHP file actually exists for security
+		try_files $uri =404;
+
+		# Fix for server variables that behave differently under nginx/php-fpm than typically expected
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
+		# Set environment variables
+		include fastcgi_params;
+		fastcgi_param PATH_INFO $fastcgi_path_info;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+		# Pass request to php-fpm fastcgi socket
+		fastcgi_pass ${PHP_FPM_SERVER};
+	}
+}

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+cd /tmp
+
+wget https://github.com/processwire/processwire/archive/dev.tar.gz -O processwire-dev.tar.gz
+
+tar -xf processwire-dev.tar.gz
+
+cp -ru processwire-dev/* /var/www/
+
+wget https://github.com/processwire/site-default/archive/main.tar.gz -O site-default-main.tar.gz
+
+tar -xf site-default-main.tar.gz
+
+cp -ru site-default-main /var/www/site-default
+
+# kick off the upstream command:
+exec /usr/local/bin/docker-php-entrypoint "$@"
