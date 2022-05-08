@@ -5,29 +5,18 @@ networks:
     name: pw
 
 services:
-  php-fpm:
-    container_name: ${PREFIX}php-fpm
+  apache:
+    container_name: ${PREFIX}apache
     build:
-      context: ./php-fpm
-    volumes:
-      - ./www:/var/www:rw
-    networks:
-      - pw
-
-  nginx:
-    container_name: ${PREFIX}nginx
-    image: nginx:alpine
+      context: ./apache
     ports:
       - 80:80
     volumes:
-      - "./www:/var/www:ro"
-      - "./nginx/conf.d:/etc/nginx/templates"
+      - "./www:/var/www/html:rw"
     depends_on:
-      - ${PREFIX}php-fpm
+      - ${PREFIX}apache
     networks:
       - pw
-    environment:
-      - PHP_FPM_SERVER=${PREFIX}php-fpm:9000
   
   db:
     container_name: ${PREFIX}db

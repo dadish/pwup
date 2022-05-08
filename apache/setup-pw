@@ -1,0 +1,21 @@
+#!/bin/sh
+
+cd /tmp
+
+curl --location --output processwire-dev.tar.gz https://github.com/processwire/processwire/archive/dev.tar.gz
+
+tar -xf processwire-dev.tar.gz
+
+cp -ru processwire-dev/* /var/www/html/
+
+curl --location --output site-default-main.tar.gz https://github.com/processwire/site-default/archive/main.tar.gz
+
+tar -xf site-default-main.tar.gz
+
+cp -ru site-default-main /var/www/html/site-default
+
+# enable apache mod_rewrite
+a2enmod rewrite
+
+# kick off the upstream command:
+exec /usr/local/bin/docker-php-entrypoint "$@"
