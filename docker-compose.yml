@@ -14,7 +14,7 @@ services:
     volumes:
       - "./www:/var/www/html:rw"
     depends_on:
-      - ${PREFIX}apache
+      - db
     networks:
       - pw
   
