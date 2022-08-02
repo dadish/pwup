@@ -1,0 +1,11 @@
+#!/bin/sh
+
+#
+# Install ProcessWire
+#
+cd /var/www/html
+
+php autoinstall.php
+
+# start the apache service
+exec /usr/local/bin/apache2-foreground "$@"

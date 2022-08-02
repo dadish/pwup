@@ -1,5 +1,7 @@
 FROM php:7.4-apache
 
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions && \
@@ -13,4 +15,6 @@ COPY php-processwire.ini "$PHP_INI_DIR/conf.d/"
 
 COPY setup-pw /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/setup-pw"]
-CMD ["apache2-foreground"]
+
+COPY install-pw /usr/local/bin/
+CMD ["/usr/local/bin/install-pw"]

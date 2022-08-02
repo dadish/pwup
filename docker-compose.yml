@@ -1,25 +1,26 @@
-version: "3.9"
-
 networks:
   pw:
     name: pw
 
 services:
   apache:
-    container_name: ${PREFIX}apache
+    container_name: ${PWUP_PREFIX}apache
     build:
       context: ./apache
     ports:
       - 80:80
     volumes:
       - "./www:/var/www/html:rw"
+      - type: bind
+        source: ./.env
+        target: /var/www/html/.env
     depends_on:
       - db
     networks:
       - pw
   
   db:
-    container_name: ${PREFIX}db
+    container_name: ${PWUP_PREFIX}db
     image: mariadb:latest
     environment:
       MARIADB_DATABASE: ${DB_NAME}
