@@ -1,5 +1,9 @@
 .env
 
-www
-!www/Readme.md
-!www/autoinstall.php
+site
+wire
+.htaccess
+composer.json
+CONTRIBUTING.md
+index.php
+LICENSE.TXT

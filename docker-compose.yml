@@ -10,18 +10,16 @@ services:
     ports:
       - 80:80
     volumes:
-      - "./www:/var/www/html:rw"
-      - type: bind
-        source: ./.env
-        target: /var/www/html/.env
+      - "./:/var/www/html:rw"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - pw
   
   db:
     container_name: ${PWUP_PREFIX}db
-    image: mariadb:latest
+    image: mariadb:10.8.3
     environment:
       MARIADB_DATABASE: ${DB_NAME}
       MARIADB_USER: ${DB_USER}
@@ -31,3 +29,9 @@ services:
       - 127.0.0.1:3306:3306
     networks:
       - pw
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect"]
+      interval: 10s
+      timeout: 5s
+      retries: 10 
+      start_period: 10s
