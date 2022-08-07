@@ -1,6 +1,8 @@
 ProcessWire Up!
 ===============
 
+[![ProcessWire Up!](https://circleci.com/gh/dadish/pwup.svg?style=svg)](https://circleci.com/gh/dadish/pwup)
+
 Docker services to start up a ProcessWire website.
 
 ## Requirements
