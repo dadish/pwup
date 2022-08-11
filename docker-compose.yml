@@ -7,6 +7,9 @@ services:
     container_name: ${PWUP_PREFIX}apache
     build:
       context: ./apache
+    environment:
+      SITE_PROFILE: ${SITE_PROFILE}
+
     ports:
       - 80:80
     volumes:
@@ -31,7 +34,7 @@ services:
       - pw
     healthcheck:
       test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect"]
-      interval: 10s
+      interval: 30s
       timeout: 5s
       retries: 10 
-      start_period: 10s
+      start_period: 30s
