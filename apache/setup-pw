@@ -8,11 +8,14 @@ tar -xf processwire-dev.tar.gz
 
 cp -ru processwire-dev/* /var/www/html/
 
-curl --location --output site-default-main.tar.gz https://github.com/processwire/site-default/archive/main.tar.gz
+if [ $SITE_PROFILE != "site-blank" ]
+then
+    curl --location --output $SITE_PROFILE-main.tar.gz https://github.com/processwire/$SITE_PROFILE/archive/main.tar.gz
 
-tar -xf site-default-main.tar.gz
+    tar -xf $SITE_PROFILE-main.tar.gz
 
-cp -ru site-default-main /var/www/html/site-default
+    cp -ru $SITE_PROFILE-main /var/www/html/$SITE_PROFILE
+fi
 
 # enable apache mod_rewrite
 a2enmod rewrite
