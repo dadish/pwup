@@ -142,6 +142,12 @@ class AutoInstaller {
 
     public function executeStep4()
     {
+        $timezones = timezone_identifiers_list();
+        $timezoneLabel = getenv('TIMEZONE');
+        $timezoneValue = array_search( $timezoneLabel, $timezones );
+        if ( ! $timezoneValue ) {
+            $timezoneValue = count($timezones) - 1;
+        }
         $this->setPostVars([
             'step' => '4',
             "dbName"	=> getenv('DB_NAME'),
@@ -151,7 +157,7 @@ class AutoInstaller {
             "dbPort"	=> "3306",
             "dbCharset"	=> getenv('DB_CHARSET'),
             "dbEngine"	=> getenv('DB_ENGINE'),
-            "timezone"	=> getenv('TIMEZONE'),
+            "timezone"	=> $timezoneValue,
             "chmodDir"	=> getenv('CHMOD_DIR'),
             "httpHosts" => getenv('HTTP_HOST'),
             "chmodFile"	=> getenv('CHMOD_FILE'),
