@@ -12,5 +12,7 @@ Docker services to start up a ProcessWire website.
 ## Usage
 
 - Clone this repository.
-- Run `docker compose up -d`
+- Run `cp .env.example .env`
+- Edit `.env` file with the desired configuration variables.
+- Run `docker compose up`
 - Navigate to `127.0.0.1`
