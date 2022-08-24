@@ -8,7 +8,7 @@ tar -xf processwire-dev.tar.gz
 
 cp -ru processwire-dev/* /var/www/html/
 
-if [ $SITE_PROFILE != "site-blank" ]
+if [ ! -d "./$SITE_PROFILE" ]
 then
     curl --location --output $SITE_PROFILE-main.tar.gz https://github.com/processwire/$SITE_PROFILE/archive/main.tar.gz
 
