@@ -9,7 +9,6 @@ services:
       context: ./apache
     environment:
       SITE_PROFILE: ${SITE_PROFILE}
-
     ports:
       - 80:80
     volumes:
@@ -19,6 +18,12 @@ services:
         condition: service_healthy
     networks:
       - pw
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /var/www/html/site/assets/installed.php || exit 1"]
+      interval: 5s
+      timeout: 2s
+      retries: 30
+      start_period: 5s
   
   db:
     container_name: ${PWUP_PREFIX}db

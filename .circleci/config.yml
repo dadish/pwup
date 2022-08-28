@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   start:
     machine:
-      image: ubuntu-2004:202111-02
+      image: ubuntu-2204:2022.07.1
       docker_layer_caching: true
     resource_class: medium
     steps:
@@ -11,7 +11,7 @@ jobs:
           name: Start the containers
           command: |
             cp .env.example .env
-            docker-compose up -d
+            docker compose up -d --wait
       - run:
           name: Waiting for Apache
           command: |
